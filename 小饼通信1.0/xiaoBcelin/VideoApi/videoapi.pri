@@ -1,11 +1,13 @@
 HEADERS += \
     $$PWD/common.h \
+    $$PWD/myfacedetect.h \
     $$PWD/screenread.h \
     $$PWD/threadworker.h \
     $$PWD/videdialog.h \
     $$PWD/videoread.h
 
 SOURCES += \
+    $$PWD/myfacedetect.cpp \
     $$PWD/screenread.cpp \
     $$PWD/threadworker.cpp \
     $$PWD/videdialog.cpp \

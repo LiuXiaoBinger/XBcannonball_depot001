@@ -4,7 +4,7 @@
 #define _DEF_UDP_PORT (43210)
 #define _DEF_UDP_PORT_zijie (1024)
 #define _DEF_TCP_PORT (8000)
-#define _DEF_TCP_SERVER_IP ("192.168.1.104")
+#define _DEF_TCP_SERVER_IP ("192.168.0.108")
 
 #define _DEF_NAME_SIZE  100
 #define _DEF_MAX_SIZE  (4096)

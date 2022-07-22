@@ -17,16 +17,16 @@
    <property name="geometry">
     <rect>
      <x>3</x>
-     <y>230</y>
-     <width>600</width>
-     <height>350</height>
+     <y>190</y>
+     <width>661</width>
+     <height>551</height>
     </rect>
    </property>
    <property name="text">
     <string/>
    </property>
    <property name="scaledContents">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QLabel" name="my_vide">

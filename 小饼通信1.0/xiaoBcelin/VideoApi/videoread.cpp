@@ -9,6 +9,8 @@ VideoRead::VideoRead(QObject *parent) : QObject(parent)
     connect( m_timer , SIGNAL(timeout())
              , this , SLOT( slot_getVideoFrame()) );
     u_id=-1;
+    //需要 xml 加到exe 同级目录里面
+    MyFaceDetect::FaceDetectInit();
 }
 
 VideoRead::~VideoRead()
@@ -32,6 +34,15 @@ void VideoRead::slot_getVideoFrame()
     // Mat 图像不是显示和传输的格式(RGB)
     // 需要格式转换 opencv 采集的格式BGR  显示格式 RGB
     //将opencv采集的BGR的图片类型转化为RGB24的类型
+    // 加滤镜 加人脸识别, 加萌拍... opencv 图像处理 todo
+    // 获取摄像头图片后 识别出人脸的位置, 返回位置对应的矩形框
+    //人脸识别 , 如果失败, 使用上一次的人脸矩形
+    std::vector<cv::Rect> faces;
+    //存储上一次识别人脸的矩形
+    //m_vecLastFace;
+
+    //if( m_moji != 0 )
+        MyFaceDetect::detectAndDisplay( frame , faces );
     cvtColor(frame,frame,CV_BGR2RGB);
     //定义QImage对象, 用于发送数据以及图片显示
     QImage image((unsigned const char*)frame.data,frame.cols,frame.rows,QImage::Format_RGB888);

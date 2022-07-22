@@ -5,7 +5,7 @@
 #include <QImage>
 #include<QTimer>
 #include"common.h"
-
+#include"myfacedetect.h"
 //图片的宽高
 #define IMAGE_WIDTH (320)
 #define IMAGE_HEIGHT (240)
@@ -30,6 +30,9 @@ private:
 
     //opencv获取图片的对象
     cv::VideoCapture cap;
+    std::vector<cv::Rect> m_vecLastFace;
+
+     int m_moji;
 public:
     int u_id;
 };

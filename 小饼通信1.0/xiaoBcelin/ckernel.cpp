@@ -77,9 +77,10 @@ Ckernel::Ckernel(QObject *parent)
        //音频和视频的网络连接
        for( int i = 0 ; i < 2 ; i++){
            m_pAVClient[i] = new TcpClientMediator;
+           connect( m_pAVClient[i] , SIGNAL( SIG_ReadyData(long,char*,int))
+                    , this , SLOT( slot_ReadyData(long,char*,int) ) );
            m_pAVClient[i]->OpenNet();
-           connect( m_pAVClient[i] , SIGNAL( SIG_ReadyData(long long,char*,int))
-                    , this , SLOT( slot_dealData(long long,char*,int) ) );
+
        }
 }
 Ckernel::~Ckernel(){
@@ -150,12 +151,7 @@ void Ckernel::dealLonginRs(long iSendIp, char *buf, int nlen)
     qDebug()<<__func__;
     //拆包
     STRU_TCP_LOGIN_RS* rs = (STRU_TCP_LOGIN_RS* ) buf;
-     //注册 视频和音频的fd
-    STRU_AUDIO_REGISTER rq_audio;
-    rq_audio.m_userid = m_id;
 
-    STRU_VIDEO_REGISTER rq_video;
-    rq_video.m_userid = m_id;
     //根据注册结果显示提示信息
     switch (rs->result){
         case parameter_error:
@@ -172,16 +168,17 @@ void Ckernel::dealLonginRs(long iSendIp, char *buf, int nlen)
                m_mainWnd->showNormal();
                //保存用户id
                m_id=rs->userld;
+               //注册 视频和音频的fd
+              STRU_AUDIO_REGISTER rq_audio;
+              rq_audio.m_userid = m_id;
 
-
-
-
+              STRU_VIDEO_REGISTER rq_video;
+              rq_video.m_userid = m_id;
                m_pAVClient[audio_client]->
                        SendData(0,(char*)&rq_audio,sizeof(rq_audio));
                m_pAVClient[video_client]->
                        SendData(0,(char*)&rq_video,sizeof(rq_video));
-        break;
-        default:
+
                break;
     }
 }
@@ -243,9 +240,9 @@ void Ckernel::delFriendInfoRq(long iSendIp, char *buf, int nlen)
         connect(videorw,SIGNAL(SIG_sendVideoFrame(QImage)),chat->videqDialog,SLOT(slot_setmyimg(QImage)));
         connect(m_pScreenRead,SIGNAL(SIG_getScreenFrame(QImage)),chat->videqDialog,SLOT(slot_setmyimg(QImage)));
         //绑定语音包捕获与kernel转发this
-        connect(auRead,SIGNAL(SIG_audioFrame( int id,QByteArray bt )),this,SLOT(slot_audioFrame(int ,QByteArray )));
+        connect(auRead,SIGNAL(SIG_audioFrame( int ,QByteArray )),this,SLOT(slot_audioFrame(int ,QByteArray )));
         //kenel接收到语音包&发送到音频显示模块
-        connect(this,SIGNAL(SIG_audioFrame( int id,QByteArray bt )),auWrite,SLOT(slot_audioFrame(int ,QByteArray )));
+        connect(this,SIGNAL(SIG_audioFrame( int ,QByteArray)),auWrite,SLOT(slot_audioFrame(int ,QByteArray )));
         //绑定语音通话请求信号和槽
         connect(chat,SIGNAL(SIG_voice (int)),this,SLOT(slot_voice (int)));
         //3.9、聊天窗口保存map中管理
@@ -640,7 +637,7 @@ void Ckernel::slot_audioFrame(int id,QByteArray ba){
     tmp += sizeof(int);
 
     memcpy( tmp , ba.data() , ba.size() );
-    cout <<__func__<<"发送音频数据"<<nPackSize<< endl;
+    //cout <<__func__<<"发送音频数据"<<nPackSize<< endl;
     m_pAVClient[0]->SendData( 0 , buf , nPackSize);//由音频socket发送
    // m_tcpClient->SendData( 0 , buf , nPackSize);
     delete[] buf;
@@ -650,6 +647,8 @@ void Ckernel::solt_deal_audio_close(int id){
      struct Exit_voice_call rp;
      rp.userld=m_id;
      rp.friendld=id;
+     auRead->pause();
+     auRead->u_id=-1;
      m_tcpClient->SendData(0,(char*)&rp,sizeof(rp));
 }
 //处理对端发送关闭语音||视频通话通知
@@ -669,8 +668,11 @@ void Ckernel::deal_audio_close(long lsendIp, char *buf, int nlen){
             chat->videqDialog->hide();
 
             videorw->slot_closeVideo();
+             auRead->pause();
             videorw->u_id=-1;
+            auRead->u_id=-1;
         }
+
     }
 
 }
@@ -684,7 +686,7 @@ void Ckernel::solt_sendVideoFrame(QImage img)
     img.save( &qbuf , "JPEG" , 50 );  //将图片的数据写入 ba
     //使用ba对象, 可以获取图片对应的缓冲区
     //可以使用ba.data() , ba.size()将缓冲区发送出去
-
+    cout <<ba.size()<<endl;
     // 写视频帧 发送
     int nPackSize = 6*sizeof(int) + ba.size();
     char * buf = new char[nPackSize];
@@ -737,6 +739,7 @@ void Ckernel::slot_SendVideo( char* buf , int nlen){
         delete[] buf;
         return;
     }
+    cout <<__func__<<nlen<< endl;
     m_pAVClient[1]->SendData( 0 , buf , nlen);//由视频socket发送
 //    m_tcpClient->SendData( 0 , buf , nlen );
     delete[] buf;

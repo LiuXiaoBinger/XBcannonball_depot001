@@ -20,6 +20,8 @@ signals:
     void SIG_screenStart();
     void SIG_screenPause();
     void SIG_close(int id);
+    void SIG_stopaudi(int id);
+
 public:
     //重写关闭事件
     void closeEvent(QCloseEvent*event);

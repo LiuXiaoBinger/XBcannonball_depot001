@@ -54,6 +54,7 @@ void videDialog::on_stat_vide_clicked()
 void videDialog::on_stop_vide_clicked()
 {
     Q_EMIT SIG_STOP();
+
 }
 
 

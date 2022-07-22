@@ -82,7 +82,7 @@ unsigned int _stdcall TcpClienNet::RecvThread(void* lpvoid) {
     TcpClienNet* pThis = (TcpClienNet*)lpvoid;
 
     pThis->RecData();
-     std::cout << "ss" <<  std::endl;
+     std::cout << "jiessssssssssssssssssss" <<  std::endl;
     return 1;
 }
 //关闭网络,关闭套接字、卸载库
@@ -110,7 +110,7 @@ void TcpClienNet::UninitNet() {
 bool TcpClienNet::SendData(long iSendIp, char* szbuf, int nlen) {
 
 
-     std::cout << "TcpClienNet::SendData" <<  std::endl;
+     //std::cout << "TcpClienNet::SendData" <<  std::endl;
     //1、校验参数
     if (!szbuf || nlen <= 0) {
          std::cout << "parameter eror" <<  std::endl;
@@ -132,7 +132,7 @@ bool TcpClienNet::SendData(long iSendIp, char* szbuf, int nlen) {
     //3、再发包内容
        int err;
     if (err=send( iSendIp ,buf,DataLen , 0)){
-         std::cout <<err<< "sendto eror:" << WSAGetLastError() <<  std::endl;
+         std::cout <<err<< "sendto eror:" << WSAGetLastError() << "::"<<DataLen<< std::endl;
         return false;
     }
 

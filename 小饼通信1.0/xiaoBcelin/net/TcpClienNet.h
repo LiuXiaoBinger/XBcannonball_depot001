@@ -4,6 +4,7 @@
 #include<WinSock2.h>
 #include<ws2tcpip.h>
 //#include<atlbase.h>
+#include"ckernel.h"
 class TcpClienNet :public INet {
 public:
 	TcpClienNet(INetMediator* pMediator);

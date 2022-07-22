@@ -159,7 +159,7 @@
   <widget class="QPushButton" name="pd_sendfile">
    <property name="geometry">
     <rect>
-     <x>200</x>
+     <x>190</x>
      <y>340</y>
      <width>75</width>
      <height>23</height>

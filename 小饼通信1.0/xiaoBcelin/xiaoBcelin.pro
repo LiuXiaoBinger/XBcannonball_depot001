@@ -15,7 +15,6 @@ INCLUDEPATH +=./mediator
 INCLUDEPATH +=./net
 include(./audioapi/audioapi.pri)
 include(./VideoApi/videoapi.pri)
-include(./document/document.pri)
 INCLUDEPATH += ./audioapi/
 INCLUDEPATH += ./VideoApi/
 #
@@ -51,5 +50,4 @@ RESOURCES += \
     res.qrc
 
 DISTFILES += \
-    VideoApi/videoapi.pri \
-    document/document.pri
+    VideoApi/videoapi.pri

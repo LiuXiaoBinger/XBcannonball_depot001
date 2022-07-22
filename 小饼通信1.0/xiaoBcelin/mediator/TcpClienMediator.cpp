@@ -33,7 +33,7 @@ bool TcpClientMediator::SendData(long lSendlp, char* buf, int nLen) {
 //处理数据
 
 void TcpClientMediator::DealData(long lSendlp, char* buf, int nLen) {
-    std::cout<<__func__<<std::endl;
+    //std::cout<<__func__<<std::endl;
      //std::cout << "Clien" << buf <<  std::endl;
 	//TODO:把接收到的数据传给kernrl
      Q_EMIT SIG_ReadyData(lSendlp, buf, nLen);

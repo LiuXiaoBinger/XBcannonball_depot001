@@ -48,11 +48,6 @@ private slots:
 private:
     Ui::chatdialog *ui;
     int m_id;//好友id
-
-
-
-
-
 public:
 //    video *Myvideo;
 //    Voice *Myvoice;
